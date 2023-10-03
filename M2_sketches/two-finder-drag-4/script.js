@@ -30,6 +30,8 @@ let state = {
     isObjectGripped: false,
     /** @type Things.Thing | undefined */
     thing: undefined,
+    /** @type {number} */
+    offsetDistance: 0
 };
 
 const gestureCentroid = (pointers) => {
@@ -71,7 +73,7 @@ const gestureTwoFinger = (a, b) => {
 };
 
 const use = () => {
-    const { thing, centroid, twoFinger, isObjectGripped} = state;
+    const { thing, centroid, twoFinger, isObjectGripped, offsetDistance} = state;
     const { distanceThreshold, heightTreshold } = settings;
     
     const thingPosX = /** @type number */(thing?.position.x) * window.innerWidth;
@@ -82,44 +84,27 @@ const use = () => {
 
     const distance = /** @type {Number} */ (twoFinger.distance.values[1]);
 
-    //setText('console', `${thingPosX - centroid.last.x} and ${thingPosY - centroid.last.y}`);
-
     if (thingIntervalXMin < centroid.last.x &&
         thingIntervalXMax > centroid.last.x && 
-        Math.abs(thingPosY - centroid.last.y) < distanceThreshold) {
-            setText('console', `${thingPosX - centroid.last.x}`);
-        if(distance < heightTreshold && distance > -heightTreshold){
-
+        Math.abs(thingPosY - centroid.last.y) < distanceThreshold &&
+        Math.abs(distance) < heightTreshold) {
             
-            //setText('console', `gripped`)
-
-            //const centroidRel = toRelativePoint(centroid.last.x, centroid.last.y);
-            //const thingRel = /** @type {Points.Point} */(thing?.position);
-            //const offset = Points.subtract(centroidRel, thingRel);
-            //let updatedPosition = Points.sum(thingRel, offset);
-            //const newPos = {x: updatedPosition.x, y: (centroid.last.y/window.innerHeight) 
-            //+ (( parseInt(/** @type string */ (thing?.el.style.height)) / 2) / window.innerHeight )}
-
             // Add this offset to the thing's original 
             // position to get the new position.
             let finalThing;
-            
-            if ( !isObjectGripped) {
-                const updatedPosX = (thingIntervalXMax - centroid.last.x)/window.innerWidth;
+            let updatedPosition
+            if (isObjectGripped) {
+                const updatedPosX = (centroid.last.x + (offsetDistance))/window.innerWidth;
                 const updatedPosY = (centroid.last.y/window.innerHeight) + (( parseInt(/** @type string */ (thing?.el.style.height)) / 2) / window.innerHeight );
-                const updatedPosition = {x: updatedPosX, y: updatedPosY};
-       
-                // Update the thing in state.things according to its id
-                const finalThing = updateThingInState({ position: updatedPosition });
+                updatedPosition = {x: updatedPosX, y: updatedPosY};
             } else {
-                const updatedPosX = (centroid.last.x)/window.innerWidth;
+                const updatedPosX = (centroid.last.x - (thingPosX - centroid.last.x))/window.innerWidth;
                 const updatedPosY = (centroid.last.y/window.innerHeight) + (( parseInt(/** @type string */ (thing?.el.style.height)) / 2) / window.innerHeight );
-                const updatedPosition = {x: updatedPosX, y: updatedPosY};
-                
-                // Update the thing in state.things according to its id
-                finalThing = updateThingInState({ position: updatedPosition });
+                updatedPosition = {x: updatedPosX, y: updatedPosY};
             }
             
+            // Update the thing in state.things according to its id
+            finalThing = updateThingInState({ position: updatedPosition });           
             
             if (finalThing) {
             // Visually update
@@ -128,10 +113,8 @@ const use = () => {
 
             //"object" gripped
             if (!isObjectGripped) {
-                updateState({ isObjectGripped: true })
+                updateState({ isObjectGripped: true, offsetDistance: thingPosX - centroid.last.x})
             }
-        }
-        
     }
     else {
         //"object" no gripped
