@@ -175,7 +175,6 @@ const draw = () => {
     reconcileChildren(currentPointsEl, pointers.store, (trackedPoint, element) => {
         if (element === null) {
             element = document.createElement(`div`);
-            element.textContent = trackedPoint.id;
         }
         positionElement(element, trackedPoint, thingSize);
         return element;
@@ -185,7 +184,6 @@ const draw = () => {
     reconcileChildren(startPointsEl, pointers.store, (trackedPoint, element) => {
         if (element === null) {
             element = document.createElement(`div`);
-            element.textContent = trackedPoint.id;
         }
         const initial = trackedPoint.initial;
         if (initial)

@@ -47,10 +47,10 @@
 
   .pointers>div,
   .thing {
-    width: 100px;
-    height: 100px;
+    width: 65px;
+    height: 65px;
     position: absolute;
-    background-color: hsl(var(--hue) 100% 15%);
+    background-color: hsl(280 100% 15%);
     border-radius: 100%;
   }
 
@@ -61,19 +61,12 @@
   }
 
   #start-points>div {
-    opacity: 0.1;
+    opacity: 0;
   }
 
   #centroid {
-    border: 3px solid hsl(200 100% 15%);
+    border: 3px solid hsl(280 100% 15%);
     background-color: unset;
-
-  }
-
-  #startCentroid {
-    border: 3px solid hsl(var(--hue) 100% 75%);
-    background-color: unset;
-    opacity: 0.1;
   }
 
   #stats {
@@ -82,6 +75,7 @@
     left: 0;
     top: 0;
     padding: 1.3em;
+    opacity: 0;
   }
 
   h2 {
@@ -112,7 +106,6 @@
   </svg> -->
 
   <section class="pointers" id="start-points"></section>
-
   <section class="pointers" id="current-points"></section>
   <section id="stats">
     <h2>Two-finger</h2>
@@ -153,8 +146,7 @@
       </tr>
     </table>
   </section>
-  <div class="thing" id="centroid" style="left:-1000px;top:-1000px">centroid</div>
-  <div class="thing" id="startCentroid" style="left:-1000px;top:-1000px">centroid start</div>
+  <div class="thing" id="centroid" style="left:-1000px;top:-1000px"></div>
   <script type="module" src="script.js"></script>
 </body>
 

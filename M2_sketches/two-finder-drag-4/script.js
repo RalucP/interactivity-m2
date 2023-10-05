@@ -131,22 +131,6 @@ const update = () => {
 
     // Pointers sorted by age, oldest first
     const byAge = [...pointers.trackedByAge()];
-
-    /*if(byAge.length === 5) {
-        setText('console', "Five fingers")
-    }
-    if(byAge.length === 4) {
-        gestureThreeFinger(byAge[0].last, byAge[1].last, byAge[2].last);
-        setText('console', "Four fingers")
-    }*/
-
-    if(byAge.length === 3) {
-        gestureThreeFinger(byAge[0].last, byAge[1].last, byAge[2].last);
-    }
-    else{
-        state.threeFinger.area.reset();
-    }
-
     if (byAge.length === 2) {
         // Got at least two touches
         gestureTwoFinger(byAge[0].last, byAge[1].last);
@@ -183,7 +167,6 @@ const draw = () => {
     reconcileChildren(currentPointsEl, pointers.store, (trackedPoint, element) => {
         if (element === null) {
             element = document.createElement(`div`);
-            element.textContent = trackedPoint.id;
         }
         positionElement(element, trackedPoint, thingSize);
         return element;
